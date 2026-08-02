@@ -1,0 +1,13 @@
+{
+  "name": "Soleil & Lune — Éphémérides",
+  "short_name": "Soleil & Lune",
+  "description": "Éphémérides, lumière, météo et trajectoires du Soleil et de la Lune.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "lang": "fr",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

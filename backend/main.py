@@ -4,9 +4,19 @@ from datetime import datetime
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 try:
-    from .calculator import get_astronomical_events, get_daily_positions
+    from .calculator import (
+        get_astronomical_events,
+        get_daily_positions,
+        get_light_events,
+        get_moon_details,
+    )
 except ImportError:
-    from calculator import get_astronomical_events, get_daily_positions
+    from calculator import (
+        get_astronomical_events,
+        get_daily_positions,
+        get_light_events,
+        get_moon_details,
+    )
 
 app = FastAPI()
 
@@ -61,5 +71,7 @@ async def get_day(
     return {
         "timezone": timezone_name,
         "events": get_astronomical_events(date_obj, lat, lon, timezone_name),
+        "light": get_light_events(date_obj, lat, lon, timezone_name),
+        "moon_details": get_moon_details(date_obj, timezone_name),
         "positions": get_daily_positions(date_obj, lat, lon, timezone_name),
     }

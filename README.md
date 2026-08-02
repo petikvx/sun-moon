@@ -1,100 +1,74 @@
 # Soleil & Lune
 
-Soleil & Lune est une application web d’éphémérides qui permet de suivre la position du Soleil et de la Lune pour une date et un lieu donnés.
-
-L’application affiche les heures de lever et de coucher, puis calcule la trajectoire des deux astres toutes les 10 minutes. Elle fonctionne avec des villes prédéfinies, la position de l’appareil ou des coordonnées saisies manuellement.
+Soleil & Lune est une application web d’éphémérides qui permet d’explorer la position du Soleil et de la Lune pour une date et un lieu donnés. Elle réunit trajectoires journalières, crépuscules, phase lunaire et conditions météo dans une interface responsive et installable.
 
 ## Fonctionnalités
 
-- calcul du lever et du coucher du Soleil ;
-- calcul du lever et du coucher de la Lune ;
-- trajectoires journalières représentées sur un graphique ;
-- possibilité d’afficher ou de masquer la trajectoire et la fiche de position de la Lune ;
-- positions calculées toutes les 10 minutes ;
-- sélection interactive de l’heure avec un curseur ;
-- sélection du jour avec un curseur couvrant toute l’année choisie ;
-- recalcul automatique après le déplacement du curseur annuel ;
-- positionnement automatique sur le dernier créneau écoulé pour la journée actuelle ;
-- bouton **Maintenant** pour revenir à la position actuelle ;
-- indication de l’altitude et de l’azimut ;
-- direction cardinale sur 16 directions ;
-- indication de visibilité au-dessus ou sous l’horizon ;
-- distance entre l’observateur et chaque astre ;
-- gestion du fuseau horaire de la ville sélectionnée ;
-- interface responsive pour ordinateur, tablette et mobile.
+- lever et coucher du Soleil et de la Lune ;
+- position toutes les 10 minutes : altitude, azimut, direction, visibilité et distance ;
+- graphique de trajectoire et carte polaire du ciel ;
+- affichage facultatif de la Lune ;
+- phase lunaire, illumination, âge et prochaines phases majeures ;
+- aubes et crépuscules civil, nautique et astronomique ;
+- heures bleues, heures dorées et durée du jour ;
+- curseur couvrant toute l’année, avec recalcul automatique ;
+- ouverture sur le dernier créneau de 10 minutes écoulé pour la date du jour ;
+- mode temps réel, actualisé chaque minute ;
+- recherche mondiale de villes, favoris persistants et villes proposées par défaut ;
+- géolocalisation et saisie manuelle des coordonnées et du fuseau horaire ;
+- météo d’observation : nébulosité, visibilité, humidité, température et score indicatif ;
+- partage de la configuration par lien ;
+- export des résultats en CSV, JSON et ICS, et du graphique en PNG ;
+- installation comme application web progressive (PWA) ;
+- prise en compte automatique de l’heure d’été et de l’heure d’hiver grâce aux fuseaux IANA.
 
-## Villes disponibles
+## Utilisation
 
-L’application propose actuellement :
+1. Recherchez une ville, choisissez une ville proposée ou utilisez **Ma position**.
+2. Choisissez une date avec le calendrier ou le curseur annuel.
+3. Déplacez le curseur horaire pour parcourir la journée par pas de 10 minutes.
+4. Activez **Temps réel** pour suivre automatiquement la journée en cours.
+5. Affichez ou masquez la Lune selon vos besoins.
+6. Utilisez les boutons d’export ou de partage pour conserver les résultats.
 
-- Paris, Lyon et Marseille ;
-- Londres ;
-- Montréal et New York ;
-- Le Caire ;
-- Saint-Denis de La Réunion ;
-- Tokyo ;
-- Sydney.
+Les favoris sont conservés dans le navigateur. Les paramètres essentiels sont également inscrits dans l’URL afin qu’un lien partagé rouvre la même vue.
 
-Chaque ville possède ses propres latitude, longitude et fuseau horaire. L’option **Coordonnées personnalisées** permet d’utiliser n’importe quel autre lieu.
+## Comprendre les données
 
-## Comprendre les informations affichées
+### Altitude et azimut
 
-### Altitude
+L’altitude est l’angle vertical par rapport à l’horizon : `0°` correspond à l’horizon, `90°` au zénith et une valeur négative à un astre sous l’horizon.
 
-L’altitude est l’angle vertical de l’astre par rapport à l’horizon :
+L’azimut est la direction horizontale : `0°` indique le nord, `90°` l’est, `180°` le sud et `270°` l’ouest. L’application ajoute une direction cardinale sur 16 secteurs.
 
-- `0°` : l’astre se trouve sur l’horizon ;
-- valeur positive : l’astre est au-dessus de l’horizon ;
-- `90°` : l’astre est au zénith, directement au-dessus de l’observateur ;
-- valeur négative : l’astre se trouve sous l’horizon.
+### Crépuscules
 
-### Azimut
+- civil : Soleil entre `0°` et `-6°` ;
+- nautique : Soleil entre `-6°` et `-12°` ;
+- astronomique : Soleil entre `-12°` et `-18°`.
 
-L’azimut indique la direction horizontale en degrés :
+Les heures bleues et dorées sont des plages indicatives calculées à partir de la hauteur du Soleil.
 
-- `0°` ou `360°` : nord ;
-- `90°` : est ;
-- `180°` : sud ;
-- `270°` : ouest.
+### Météo d’observation
 
-L’application traduit également cette valeur en direction cardinale : `N`, `NNE`, `NE`, `ENE`, `E`, etc.
+Le score combine notamment la nébulosité, la visibilité et l’humidité. Il sert d’aide rapide à l’observation, mais ne remplace pas une prévision locale détaillée. La météo n’est disponible que pour les dates couvertes par la prévision en ligne.
 
-### Visibilité
+La recherche de lieux et la météo utilisent les API Open-Meteo : [documentation de géocodage](https://open-meteo.com/en/docs/geocoding-api) et [documentation des prévisions](https://open-meteo.com/en/docs).
 
-Un astre est marqué **Visible** lorsque son altitude géométrique est supérieure ou égale à `0°`. Cette indication ne tient pas compte des nuages, des bâtiments, du relief ni des autres obstacles locaux.
-
-### Distance
-
-La distance est affichée en kilomètres. Elle correspond à la distance calculée entre l’observateur terrestre et le Soleil ou la Lune au moment sélectionné.
-
-## Utiliser l’application
-
-1. Sélectionnez une ville ou cliquez sur **Ma position**.
-2. Choisissez la date à étudier avec le calendrier ou le curseur annuel. Le curseur relance automatiquement le calcul après le déplacement.
-3. Si nécessaire, ouvrez **Coordonnées et fuseau horaire** pour modifier les valeurs manuellement.
-4. Cliquez sur **Afficher la journée**.
-5. Consultez les heures de lever et de coucher.
-6. Déplacez le curseur pour parcourir la journée par pas de 10 minutes.
-7. Lisez l’altitude, l’azimut, la direction, la visibilité et la distance dans les fiches Soleil et Lune.
-
-Pour la journée actuelle, le curseur s’ouvre sur le dernier créneau de 10 minutes déjà écoulé. Pour une autre date, il s’ouvre vers le milieu de la journée.
-
-## Technologies utilisées
+## Technologies
 
 ### Frontend
 
-- React 19 ;
-- TypeScript ;
-- Vite ;
-- Tailwind CSS ;
-- Axios ;
-- Lucide React pour les icônes.
+- React 19, TypeScript et Vite ;
+- Recharts pour les graphiques ;
+- Lucide React pour les icônes ;
+- API Open-Meteo pour la recherche de villes et la météo ;
+- service worker et manifeste PWA.
 
 ### Backend
 
 - Python 3.12 ;
-- FastAPI ;
-- Uvicorn ;
+- FastAPI et Uvicorn ;
 - Skyfield ;
 - éphéméride JPL DE421.
 
@@ -102,38 +76,45 @@ Pour la journée actuelle, le curseur s’ouvre sur le dernier créneau de 10 mi
 
 ```text
 sun-moon/
+├── .github/workflows/ci.yml       # Vérifications automatiques GitHub Actions
 ├── backend/
-│   ├── calculator.py       # Calculs astronomiques
-│   ├── main.py             # API FastAPI
-│   ├── de421.bsp           # Données d’éphéméride JPL
-│   ├── requirements.txt    # Dépendances Python
-│   └── venv/               # Environnement Python local
+│   ├── calculator.py              # Calculs astronomiques
+│   ├── main.py                    # API FastAPI
+│   ├── tests/                     # Tests unitaires
+│   ├── de421.bsp                  # Éphéméride JPL
+│   ├── Dockerfile
+│   └── requirements.txt
 ├── frontend/
-│   ├── src/App.tsx         # Interface et logique React
-│   ├── src/index.css       # Styles globaux
-│   ├── vite.config.ts      # Configuration et proxy API
-│   └── package.json        # Dépendances et scripts frontend
+│   ├── public/                    # Manifeste et service worker PWA
+│   ├── src/components/            # Composants d’interface et graphiques
+│   ├── src/services/              # Accès aux services externes
+│   ├── src/utils/                 # Calculs d’affichage et exports
+│   ├── src/App.tsx
+│   ├── src/index.css
+│   ├── Dockerfile
+│   └── nginx.conf
+├── docker-compose.yml
 └── README.md
 ```
 
-Le frontend appelle l’API avec des chemins commençant par `/api`. En développement, le proxy Vite transmet ces appels au backend disponible sur `http://127.0.0.1:8000`.
+En développement, Vite transmet les chemins `/api` au backend sur le port `8000`. En production Docker, Nginx sert le frontend et transmet ces mêmes chemins au conteneur backend.
 
-## Prérequis
+## Installation classique
 
-- Python 3.12 ou une version compatible ;
-- Node.js avec npm ;
-- un navigateur web récent.
+### Prérequis
 
-## Première installation
+- Python 3.12 ou compatible ;
+- Node.js 22 ou compatible avec npm ;
+- un navigateur récent.
 
-Clonez le dépôt, puis placez-vous dans le dossier du projet :
+Clonez le dépôt :
 
 ```bash
 git clone https://github.com/petikvx/sun-moon.git
 cd sun-moon
 ```
 
-Créez l’environnement Python et installez le backend :
+Installez le backend :
 
 ```bash
 python3 -m venv backend/venv
@@ -148,104 +129,88 @@ npm install
 cd ..
 ```
 
-Le fichier `backend/de421.bsp` est déjà fourni avec le projet et doit rester dans le dossier `backend`.
+Le fichier `backend/de421.bsp` est fourni avec le projet et doit rester dans ce dossier.
 
-## Lancer l’application
+## Lancer en développement
 
-L’application utilise deux serveurs. Ouvrez deux terminaux et laissez-les actifs pendant l’utilisation.
+Ouvrez deux terminaux à la racine du projet.
 
-### Terminal 1 — backend
+Terminal 1 — API :
 
 ```bash
 backend/venv/bin/uvicorn backend.main:app --reload
 ```
 
-L’API est disponible sur <http://127.0.0.1:8000>. Sa documentation interactive FastAPI est disponible sur <http://127.0.0.1:8000/docs>.
-
-### Terminal 2 — frontend
+Terminal 2 — interface :
 
 ```bash
 cd frontend
 npm run dev
 ```
 
-Ouvrez ensuite :
+Ouvrez <http://localhost:5173>. La documentation de l’API se trouve sur <http://127.0.0.1:8000/docs>.
 
-<http://localhost:5173>
+Pour arrêter les serveurs, utilisez `Ctrl+C` dans chacun des terminaux.
 
-## Arrêter l’application
+## Lancer avec Docker
 
-Dans chacun des deux terminaux, utilisez :
+Docker permet de démarrer toute l’application avec une seule commande :
 
-```text
-Ctrl + C
+```bash
+docker compose up --build -d
+```
+
+Ouvrez ensuite <http://localhost:8080>.
+
+Consultez les journaux :
+
+```bash
+docker compose logs -f
+```
+
+Arrêtez l’application :
+
+```bash
+docker compose down
 ```
 
 ## API
 
-Les deux endpoints acceptent les paramètres suivants :
-
-| Paramètre | Exemple | Description |
-| --- | --- | --- |
-| `date` | `2026-08-02` | Date au format `AAAA-MM-JJ` |
-| `lat` | `48.8566` | Latitude comprise entre `-90` et `90` |
-| `lon` | `2.3522` | Longitude comprise entre `-180` et `180` |
-| `timezone` | `Europe/Paris` | Identifiant de fuseau horaire IANA |
+Les endpoints acceptent une date au format `AAAA-MM-JJ`, une latitude entre `-90` et `90`, une longitude entre `-180` et `180`, et un identifiant de fuseau IANA tel que `Europe/Paris`.
 
 ### `GET /api/events`
 
-Retourne uniquement les quatre événements principaux.
+Retourne les levers et couchers principaux :
 
 ```bash
 curl "http://127.0.0.1:8000/api/events?date=2026-08-02&lat=48.8566&lon=2.3522&timezone=Europe%2FParis"
 ```
 
-Exemple de réponse :
-
-```json
-{
-  "sunrise": "2026-08-02T04:25:08Z",
-  "sunset": "2026-08-02T19:27:44Z",
-  "moonrise": "2026-08-02T20:50:18Z",
-  "moonset": "2026-08-02T08:35:55Z"
-}
-```
-
-Les dates de l’API sont exprimées en UTC. L’interface les convertit dans le fuseau horaire sélectionné.
-
 ### `GET /api/day`
 
-Retourne les événements, le fuseau horaire et toutes les positions de la journée par pas de 10 minutes.
+Retourne en une seule réponse :
+
+- les levers et couchers ;
+- les crépuscules et plages de lumière ;
+- la phase et l’illumination de la Lune, ainsi que les prochaines phases ;
+- toutes les positions de la journée, espacées de 10 minutes ;
+- le fuseau horaire utilisé.
 
 ```bash
 curl "http://127.0.0.1:8000/api/day?date=2026-08-02&lat=48.8566&lon=2.3522&timezone=Europe%2FParis"
 ```
 
-Chaque position contient :
-
-```json
-{
-  "time": "2026-08-02T10:00:00Z",
-  "sun": {
-    "altitude": 50.9,
-    "azimuth": 132.5,
-    "direction": "SE",
-    "above_horizon": true,
-    "distance_km": 151805632
-  },
-  "moon": {
-    "altitude": -13.8,
-    "azimuth": 284.8,
-    "direction": "ONO",
-    "above_horizon": false,
-    "distance_km": 388819
-  }
-}
-```
+Les instants sont renvoyés en UTC. L’interface les affiche dans le fuseau choisi. Une journée normale contient 145 positions, extrémités incluses ; le nombre varie lors des changements d’heure.
 
 ## Vérifier le projet
 
-Vérifier le frontend :
+Tests du backend :
+
+```bash
+backend/venv/bin/python -m unittest discover -s backend/tests -v
+```
+
+Qualité et compilation du frontend :
 
 ```bash
 cd frontend
@@ -253,36 +218,48 @@ npm run lint
 npm run build
 ```
 
-Vérifier la syntaxe du backend :
+Construction des images :
 
 ```bash
-backend/venv/bin/python -m py_compile backend/main.py backend/calculator.py
+docker compose build
 ```
+
+GitHub Actions exécute automatiquement les tests, le lint et la compilation à chaque push et pull request.
+
+## Installation PWA
+
+Après une première ouverture de la version de production, utilisez l’option **Installer l’application** du navigateur. Le service worker met en cache l’interface pour faciliter sa réouverture ; les nouveaux calculs astronomiques et les données météo nécessitent néanmoins l’accès aux services correspondants.
 
 ## Dépannage
 
-### L’interface affiche « Impossible de joindre le serveur »
+### Impossible de joindre le serveur
 
-Vérifiez que le backend Uvicorn est toujours actif dans le premier terminal et écoute sur le port `8000`.
+En développement, vérifiez que Uvicorn écoute sur le port `8000`. Avec Docker, contrôlez l’état et les journaux :
 
-### La géolocalisation ne fonctionne pas
+```bash
+docker compose ps
+docker compose logs
+```
 
-Autorisez l’accès à la position dans le navigateur. La géolocalisation fonctionne sur `localhost` ou sur un site servi en HTTPS. Vous pouvez toujours saisir les coordonnées manuellement.
+### Géolocalisation indisponible
 
-### Le port est déjà utilisé
-
-Arrêtez l’ancien serveur avec `Ctrl + C`. Le frontend attend actuellement l’API sur le port `8000` et Vite sur le port `5173`.
+Autorisez la position dans le navigateur. Cette fonction exige `localhost` ou HTTPS. La recherche de ville et les coordonnées manuelles restent disponibles.
 
 ### Une heure semble décalée
 
-Vérifiez le fuseau horaire dans la section avancée. Il doit utiliser un identifiant IANA valide, par exemple `Europe/Paris`, `America/New_York` ou `Asia/Tokyo`.
+Vérifiez le fuseau IANA associé au lieu. Les transitions de mars et d’octobre sont gérées automatiquement par le moteur de fuseaux horaires.
+
+### Pas de météo
+
+Vérifiez la connexion Internet et choisissez une date située dans la plage de prévision disponible. Les calculs astronomiques continuent de fonctionner sans météo.
 
 ## Limites
 
-- l’éphéméride DE421 limite les dates acceptées du 29 juillet 1899 au 8 octobre 2053 ;
-- la visibilité ne tient pas compte de la météo, du relief, des bâtiments ou de la végétation ;
-- les coordonnées personnalisées nécessitent de choisir manuellement le bon fuseau horaire ;
-- les informations sont destinées à l’observation et ne doivent pas être utilisées seules pour une navigation critique.
+- DE421 couvre les dates du 29 juillet 1899 au 8 octobre 2053 ;
+- la visibilité astronomique ne tient pas compte du relief, des bâtiments ou de la végétation ;
+- le score météo est indicatif ;
+- les heures bleues et dorées reposent sur des seuils solaires conventionnels ;
+- l’outil ne doit pas être utilisé seul pour une navigation critique.
 
 ## Crédits
 

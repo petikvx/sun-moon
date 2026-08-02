@@ -126,10 +126,11 @@ Le frontend appelle l’API avec des chemins commençant par `/api`. En dévelop
 
 ## Première installation
 
-Placez-vous dans le dossier du projet :
+Clonez le dépôt, puis placez-vous dans le dossier du projet :
 
 ```bash
-cd /home/petik/Downloads/sun-moon
+git clone https://github.com/petikvx/sun-moon.git
+cd sun-moon
 ```
 
 Créez l’environnement Python et installez le backend :
@@ -156,7 +157,6 @@ L’application utilise deux serveurs. Ouvrez deux terminaux et laissez-les acti
 ### Terminal 1 — backend
 
 ```bash
-cd /home/petik/Downloads/sun-moon
 backend/venv/bin/uvicorn backend.main:app --reload
 ```
 
@@ -165,7 +165,7 @@ L’API est disponible sur <http://127.0.0.1:8000>. Sa documentation interactive
 ### Terminal 2 — frontend
 
 ```bash
-cd /home/petik/Downloads/sun-moon/frontend
+cd frontend
 npm run dev
 ```
 
@@ -248,7 +248,7 @@ Chaque position contient :
 Vérifier le frontend :
 
 ```bash
-cd /home/petik/Downloads/sun-moon/frontend
+cd frontend
 npm run lint
 npm run build
 ```
@@ -256,7 +256,6 @@ npm run build
 Vérifier la syntaxe du backend :
 
 ```bash
-cd /home/petik/Downloads/sun-moon
 backend/venv/bin/python -m py_compile backend/main.py backend/calculator.py
 ```
 

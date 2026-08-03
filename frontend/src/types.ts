@@ -80,7 +80,43 @@ export interface WeatherHour {
   visibility: number;
   humidity: number;
   temperature: number;
+  precipitationProbability?: number;
+  windSpeed?: number;
 }
+
+export interface ForecastAstronomyDay {
+  date: string;
+  events: Events;
+  light: LightEvents;
+  moon_details: MoonDetails;
+}
+
+export interface AstronomyForecast {
+  timezone: string;
+  days: ForecastAstronomyDay[];
+}
+
+export interface ObservationForecastDay extends ForecastAstronomyDay {
+  cloudCover: number | null;
+  visibility: number | null;
+  humidity: number | null;
+  temperatureMin: number | null;
+  temperatureMax: number | null;
+  precipitationProbability: number | null;
+  windSpeed: number | null;
+  score: number | null;
+  darkSeconds: number | null;
+}
+
+export interface AlertPreferences {
+  enabled: boolean;
+  maxCloudCover: number;
+  minVisibilityKm: number;
+  requireMoonBelow: boolean;
+  requireAstronomicalNight: boolean;
+}
+
+export type ThemeMode = 'auto' | 'dark' | 'light' | 'contrast';
 
 export interface WeatherData {
   hours: WeatherHour[];

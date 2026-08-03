@@ -125,7 +125,11 @@ def get_light_events(
     }
 
 
-def get_moon_details(date: datetime, timezone_name: str = "UTC"):
+def get_moon_details(
+    date: datetime,
+    timezone_name: str = "UTC",
+    include_next_phases: bool = True,
+):
     _, _, utc_start, utc_end = _day_bounds(date, timezone_name)
     midpoint = utc_start + (utc_end - utc_start) / 2
     moment = timescale.from_datetime(midpoint)
@@ -134,9 +138,9 @@ def get_moon_details(date: datetime, timezone_name: str = "UTC"):
     illumination = float(moon_position.fraction_illuminated(sun)) * 100
     phase_index = int((phase_angle + 22.5) // 45) % 8
 
-    search_end = min(midpoint + timedelta(days=40), EPHEMERIS_END)
     next_phases = []
-    if search_end > midpoint:
+    search_end = min(midpoint + timedelta(days=40), EPHEMERIS_END)
+    if include_next_phases and search_end > midpoint:
         phase_times, phase_codes = almanac.find_discrete(
             moment,
             timescale.from_datetime(search_end),

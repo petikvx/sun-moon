@@ -1,3 +1,4 @@
+import asyncio
 import unittest
 from datetime import datetime
 
@@ -6,6 +7,8 @@ from backend.calculator import (
     get_light_events,
     get_moon_details,
 )
+from backend.main import _request_values, get_forecast
+from fastapi import HTTPException
 
 
 class CalculatorTests(unittest.TestCase):
@@ -39,6 +42,25 @@ class CalculatorTests(unittest.TestCase):
         self.assertLess(light["astronomical_dawn"], light["civil_dawn"])
         self.assertGreater(light["astronomical_dusk"], light["civil_dusk"])
         self.assertGreater(light["day_length_seconds"], 0)
+
+    def test_api_rejects_unknown_timezone(self):
+        with self.assertRaises(HTTPException) as context:
+            _request_values("2026-08-03", "Mars/Olympus_Mons")
+        self.assertEqual(context.exception.status_code, 400)
+
+    def test_forecast_endpoint_returns_seven_lightweight_days(self):
+        result = asyncio.run(get_forecast(
+            start="2026-08-03",
+            days=7,
+            lat=48.8566,
+            lon=2.3522,
+            timezone_name="Europe/Paris",
+        ))
+        self.assertEqual(len(result["days"]), 7)
+        self.assertEqual(result["days"][0]["date"], "2026-08-03")
+        self.assertEqual(result["days"][-1]["date"], "2026-08-09")
+        self.assertNotIn("positions", result["days"][0])
+        self.assertEqual(result["days"][0]["moon_details"]["next_phases"], [])
 
 
 if __name__ == "__main__":

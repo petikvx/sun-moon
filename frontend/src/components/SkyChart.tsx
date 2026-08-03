@@ -19,10 +19,10 @@ export function SkyChart({ positions, selectedIndex, timezone, showMoon }: { pos
         <text x="8" y="25" fill="#94a3b8" fontSize="11">+90°</text><text x="8" y="114" fill="#94a3b8" fontSize="11">0°</text><text x="8" y="202" fill="#94a3b8" fontSize="11">−90°</text><text x="58" y="104" fill="#94a3b8" fontSize="10">horizon</text>
         {ticks.map((index) => <g key={index}><line x1={x(index)} y1="200" x2={x(index)} y2="205" stroke="#64748b" /><text x={x(index)} y="220" textAnchor="middle" fill="#94a3b8" fontSize="11">{formatTime(positions[index].time, timezone)}</text></g>)}
         <polyline points={path('sun')} fill="none" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
-        {showMoon && <polyline points={path('moon')} fill="none" stroke="#c7d2fe" strokeWidth="3" strokeLinecap="round" />}
+        {showMoon && <polyline points={path('moon')} fill="none" stroke="#67e8f9" strokeWidth="3" strokeLinecap="round" strokeDasharray="8 5" />}
         <line x1={x(selectedIndex)} y1="20" x2={x(selectedIndex)} y2="200" stroke="#fff" strokeOpacity="0.35" />
         <circle cx={x(selectedIndex)} cy={y(positions[selectedIndex].sun.altitude)} r="6" fill="#fbbf24" stroke="#fff" strokeWidth="2" />
-        {showMoon && <circle cx={x(selectedIndex)} cy={y(positions[selectedIndex].moon.altitude)} r="6" fill="#c7d2fe" stroke="#fff" strokeWidth="2" />}
+        {showMoon && <circle cx={x(selectedIndex)} cy={y(positions[selectedIndex].moon.altitude)} r="6" fill="#67e8f9" stroke="#fff" strokeWidth="2" />}
       </svg>
     </div>
   );

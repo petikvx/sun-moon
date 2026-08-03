@@ -6,7 +6,7 @@ Soleil & Lune est une application web d’éphémérides qui permet d’explorer
 
 - lever et coucher du Soleil et de la Lune ;
 - position toutes les 10 minutes : altitude, azimut, direction, visibilité et distance ;
-- graphique de trajectoire et carte polaire du ciel ;
+- graphique de trajectoire et voûte céleste du ciel ;
 - affichage facultatif de la Lune ;
 - phase lunaire, illumination, âge et prochaines phases majeures ;
 - aubes et crépuscules civil, nautique et astronomique ;
@@ -17,6 +17,12 @@ Soleil & Lune est une application web d’éphémérides qui permet d’explorer
 - recherche mondiale de villes, favoris persistants et villes proposées par défaut ;
 - géolocalisation et saisie manuelle des coordonnées et du fuseau horaire ;
 - météo d’observation : nébulosité, visibilité, humidité, température et score indicatif ;
+- tableau comparatif des sept prochaines nuits avec score, vent, pluie et durée de nuit noire ;
+- carte OpenStreetMap interactive avec détection automatique du fuseau horaire ;
+- alertes locales paramétrables selon les nuages, la visibilité, la Lune et la nuit astronomique ;
+- voûte céleste animée avec trajectoires, horizon, zénith et points cardinaux ;
+- thèmes automatique, sombre, clair et contraste élevé ;
+- navigation clavier, lien d’accès rapide, états accessibles et réduction des animations ;
 - partage de la configuration par lien ;
 - export des résultats en CSV, JSON et ICS, et du graphique en PNG ;
 - installation comme application web progressive (PWA) ;
@@ -30,6 +36,8 @@ Soleil & Lune est une application web d’éphémérides qui permet d’explorer
 4. Activez **Temps réel** pour suivre automatiquement la journée en cours.
 5. Affichez ou masquez la Lune selon vos besoins.
 6. Utilisez les boutons d’export ou de partage pour conserver les résultats.
+7. Consultez les sept prochaines nuits pour choisir la meilleure date, ou cliquez sur la carte pour déplacer le lieu.
+8. Configurez une alerte locale selon vos conditions d’observation préférées.
 
 Les favoris sont conservés dans le navigateur. Les paramètres essentiels sont également inscrits dans l’URL afin qu’un lien partagé rouvre la même vue.
 
@@ -53,14 +61,20 @@ Les heures bleues et dorées sont des plages indicatives calculées à partir de
 
 Le score combine notamment la nébulosité, la visibilité et l’humidité. Il sert d’aide rapide à l’observation, mais ne remplace pas une prévision locale détaillée. La météo n’est disponible que pour les dates couvertes par la prévision en ligne.
 
-La recherche de lieux et la météo utilisent les API Open-Meteo : [documentation de géocodage](https://open-meteo.com/en/docs/geocoding-api) et [documentation des prévisions](https://open-meteo.com/en/docs).
+La recherche de lieux, la résolution du fuseau et la météo utilisent les API Open-Meteo : [documentation de géocodage](https://open-meteo.com/en/docs/geocoding-api) et [documentation des prévisions](https://open-meteo.com/en/docs). La carte suit la [politique d’utilisation des tuiles OpenStreetMap](https://operations.osmfoundation.org/policies/tiles/) et affiche l’attribution requise.
+
+### Alertes locales
+
+L’autorisation est demandée uniquement après un clic sur le bouton d’activation. L’alerte est réévaluée avec le créneau météo et astronomique affiché. Elle fonctionne tant que la page ou la PWA reste active ; une notification push permanente lorsque l’application est fermée nécessiterait un serveur d’abonnement. Les notifications demandent `localhost` ou HTTPS.
 
 ## Technologies
 
 ### Frontend
 
 - React 19, TypeScript et Vite ;
-- Recharts pour les graphiques ;
+- Leaflet et React Leaflet pour la carte interactive ;
+- Vitest et Testing Library pour les tests frontend ;
+- graphiques SVG natifs, avec tracés distincts adaptés au daltonisme ;
 - Lucide React pour les icônes ;
 - API Open-Meteo pour la recherche de villes et la météo ;
 - service worker et manifeste PWA.
@@ -202,6 +216,16 @@ curl "http://127.0.0.1:8000/api/day?date=2026-08-02&lat=48.8566&lon=2.3522&timez
 
 Les instants sont renvoyés en UTC. L’interface les affiche dans le fuseau choisi. Une journée normale contient 145 positions, extrémités incluses ; le nombre varie lors des changements d’heure.
 
+### `GET /api/forecast`
+
+Retourne un résumé astronomique léger sur une à sept journées, sans les trajectoires de 10 minutes :
+
+```bash
+curl "http://127.0.0.1:8000/api/forecast?start=2026-08-03&days=7&lat=48.8566&lon=2.3522&timezone=Europe%2FParis"
+```
+
+La réponse contient pour chaque date les événements principaux, les crépuscules, la durée du jour et l’état de la Lune. Le frontend fusionne ces données avec les heures météo nocturnes pour calculer le score d’observation.
+
 ## Vérifier le projet
 
 Tests du backend :
@@ -215,6 +239,7 @@ Qualité et compilation du frontend :
 ```bash
 cd frontend
 npm run lint
+npm test
 npm run build
 ```
 
@@ -224,7 +249,7 @@ Construction des images :
 docker compose build
 ```
 
-GitHub Actions exécute automatiquement les tests, le lint et la compilation à chaque push et pull request.
+GitHub Actions exécute automatiquement les tests backend et frontend, le lint, la compilation, la construction Docker et un test HTTP complet à chaque push et pull request.
 
 ## Installation PWA
 
@@ -258,6 +283,9 @@ Vérifiez la connexion Internet et choisissez une date située dans la plage de 
 - DE421 couvre les dates du 29 juillet 1899 au 8 octobre 2053 ;
 - la visibilité astronomique ne tient pas compte du relief, des bâtiments ou de la végétation ;
 - le score météo est indicatif ;
+- les prévisions dépendent des modèles et de la période disponible chez Open-Meteo ;
+- les tuiles OpenStreetMap ne sont pas préchargées pour une utilisation hors ligne ;
+- les alertes locales ne remplacent pas un service push fonctionnant application fermée ;
 - les heures bleues et dorées reposent sur des seuils solaires conventionnels ;
 - l’outil ne doit pas être utilisé seul pour une navigation critique.
 

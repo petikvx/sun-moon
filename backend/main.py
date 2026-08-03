@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 try:
@@ -75,3 +75,33 @@ async def get_day(
         "moon_details": get_moon_details(date_obj, timezone_name),
         "positions": get_daily_positions(date_obj, lat, lon, timezone_name),
     }
+
+
+@app.get("/api/forecast")
+async def get_forecast(
+    start: str = Query(..., description="Start date in YYYY-MM-DD format"),
+    days: int = Query(7, ge=1, le=7, description="Number of days"),
+    lat: float = Query(..., ge=-90, le=90, description="Latitude"),
+    lon: float = Query(..., ge=-180, le=180, description="Longitude"),
+    timezone_name: str = Query("UTC", alias="timezone"),
+):
+    start_date = _request_values(start, timezone_name)
+    end_date = start_date + timedelta(days=days - 1)
+    if end_date > datetime(2053, 10, 8):
+        raise HTTPException(status_code=400, detail="La période dépasse la limite de l’éphéméride.")
+
+    forecast_days = []
+    for offset in range(days):
+        current_date = start_date + timedelta(days=offset)
+        forecast_days.append({
+            "date": current_date.strftime("%Y-%m-%d"),
+            "events": get_astronomical_events(current_date, lat, lon, timezone_name),
+            "light": get_light_events(current_date, lat, lon, timezone_name),
+            "moon_details": get_moon_details(
+                current_date,
+                timezone_name,
+                include_next_phases=False,
+            ),
+        })
+
+    return {"timezone": timezone_name, "days": forecast_days}

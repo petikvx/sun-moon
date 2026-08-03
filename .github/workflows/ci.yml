@@ -19,6 +19,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
       - run: npm run lint
+      - run: npm test
       - run: npm run build
 
   backend:
@@ -32,3 +33,22 @@ jobs:
           cache-dependency-path: backend/requirements.txt
       - run: pip install -r backend/requirements.txt
       - run: python -m unittest backend.tests.test_calculator -v
+
+  docker-smoke:
+    runs-on: ubuntu-latest
+    needs: [frontend, backend]
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose build
+      - run: docker compose up -d
+      - name: Verify frontend and proxied API
+        run: |
+          for attempt in {1..20}; do
+            curl --fail --silent http://127.0.0.1:8080/ >/dev/null && \
+            curl --fail --silent "http://127.0.0.1:8080/api/forecast?start=2026-08-03&days=2&lat=48.8566&lon=2.3522&timezone=Europe%2FParis" >/dev/null && exit 0
+            sleep 2
+          done
+          docker compose logs
+          exit 1
+      - if: always()
+        run: docker compose down
